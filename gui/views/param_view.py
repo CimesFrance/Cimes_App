@@ -449,9 +449,17 @@ class ParamView:
         # self._update_current_scale_display()
     def _call_measure_app(self):
         self.win = ApplicationCalibrage(self.app.facteur_conversion) # On ouvre l'application de mesure
-        self.win.grab_set() # On desactive l'interraction sur la fenetre principale
-        self.win.wait_window() # On attent que la fenetre soit fermer pour passer à la ligne suivant
-        save_conversion_parameter(float(self.app.facteur_conversion.get()))
+        
+        def on_close():
+            try:
+                # Sauvegarder le paramètre lors de la fermeture
+                val = float(self.app.facteur_conversion.get())
+                save_conversion_parameter(val)
+            except Exception as e:
+                print(f"Erreur lors de la sauvegarde du facteur de conversion : {e}")
+            self.win.destroy()
+
+        self.win.protocol("WM_DELETE_WINDOW", on_close)
         # self.lire_f_convers() # On met a jour le facteur de conversion
     
     def _update_calibration_status(self):

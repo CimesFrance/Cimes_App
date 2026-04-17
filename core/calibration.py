@@ -18,7 +18,6 @@ def undistort_img(dist,mtx,cv2_bgr_img):
         return cv2_bgr_img
 
 
-
 def homo_and_pixel_conversion(cv2_bgr_undistort_img, homo_matrix, thersh_cutting=100):
     try:
         if cv2_bgr_undistort_img is None or homo_matrix is None:
