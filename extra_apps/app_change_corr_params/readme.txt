@@ -1,0 +1,1 @@
+Cette sous application permet à l'utilisateur de changer les paramètres empirique de correction de courbe de granulométrie
