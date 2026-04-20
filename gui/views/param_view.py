@@ -448,7 +448,12 @@ class ParamView:
         # Mettre à jour l'affichage de l'échelle
         # self._update_current_scale_display()
     def _call_measure_app(self):
-        self.win = ApplicationCalibrage(self.app.facteur_conversion) # On ouvre l'application de mesure
+        if hasattr(self, 'calibration_win') and self.calibration_win.winfo_exists():
+            self.calibration_win.lift()
+            self.calibration_win.focus_force()
+            return
+            
+        self.calibration_win = ApplicationCalibrage(self.app.facteur_conversion) # On ouvre l'application de mesure
         
         def on_close():
             try:
@@ -457,9 +462,9 @@ class ParamView:
                 save_conversion_parameter(val)
             except Exception as e:
                 print(f"Erreur lors de la sauvegarde du facteur de conversion : {e}")
-            self.win.destroy()
+            self.calibration_win.destroy()
 
-        self.win.protocol("WM_DELETE_WINDOW", on_close)
+        self.calibration_win.protocol("WM_DELETE_WINDOW", on_close)
         # self.lire_f_convers() # On met a jour le facteur de conversion
     
     def _update_calibration_status(self):

@@ -229,11 +229,16 @@ class CimesApp(tk.Tk):
         self.change_corr_btn.pack(side="left", padx=5)
     
     def _change_correction(self):
-        self.win = appReglageParamsCorrectEmpririque(self.correction_granulo) # On ouvre l'application de mesure
+        if hasattr(self, 'correction_win') and self.correction_win.winfo_exists():
+            self.correction_win.lift()
+            self.correction_win.focus_force()
+            return
+            
+        self.correction_win = appReglageParamsCorrectEmpririque(self.correction_granulo) # On ouvre l'application de mesure
         def on_close():
             save_correction_parameters(self.correction_granulo["scale"].get(),self.correction_granulo["offset"].get())
-            self.win.destroy()
-        self.win.protocol("WM_DELETE_WINDOW", on_close)
+            self.correction_win.destroy()
+        self.correction_win.protocol("WM_DELETE_WINDOW", on_close)
     
     def _setup_initial_configuration(self):
         """Configure l'application au démarrage"""
